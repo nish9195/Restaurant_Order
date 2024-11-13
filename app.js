@@ -25,7 +25,8 @@ app.get("/orders/:orderId", async (req, res) => {
 
 app.post("/createOrder", jsonParser, async (req, res) => {
     const result = await createOrder(req.body);
-    res.send(result);
+    const resultDelivery = await axios.post(`https:localhost:8081/api/v1/delivery/${orderId}/assign`);
+    res.send([result, resultDelivery]);
 })
 
 app.use((err, req, res, next) => {
