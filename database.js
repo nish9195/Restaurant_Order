@@ -11,12 +11,12 @@ const pool = mysql.createPool({
 }).promise();
 
 export async function getOrders() {
-    const [rows] = await pool.query("SELECT * FROM orders");
+    const [rows] = await pool.query("SELECT * FROM orders LEFT OUTER JOIN address ON orders.address_id = address.address_id");
     return rows;
 }
 
 export async function getOrder(orderId) {
-    const [rows] = await pool.query("SELECT * FROM orders WHERE order_id = ?", [orderId]);
+    const [rows] = await pool.query("SELECT * FROM orders LEFT OUTER JOIN address ON orders.address_id = address.address_id WHERE order_id = ?", [orderId]);
     return rows;
 }
 
