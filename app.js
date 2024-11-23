@@ -1,6 +1,6 @@
 import express from 'express';
 import axios from 'axios';
-import { getOrders, getOrder, createOrder } from './database.js';
+import { getOrders, getOrder, createOrder, createAddress, getAddresses, getAddress } from './database.js';
 import bodyParser from 'body-parser';
 
 var jsonParser = bodyParser.json();
@@ -27,6 +27,22 @@ app.post("/createOrder", jsonParser, async (req, res) => {
     const result = await createOrder(req.body);
     const resultDelivery = await axios.post(`https:localhost:8081/api/v1/delivery/${orderId}/assign`);
     res.send([result, resultDelivery]);
+    // res.send(result);
+})
+
+app.post("/createAddress", jsonParser, async (req, res) => {
+    const result = await createAddress(req.body);
+    res.send(result);
+})
+
+app.get("/addresses/:userId", async (req, res) => {
+    const addresses = await getAddress(req.params.userId);
+    res.send(addresses);
+})
+
+app.get("/addresses", async (req, res) => {
+    const addresses = await getAddresses();
+    res.send(addresses);
 })
 
 app.use((err, req, res, next) => {
